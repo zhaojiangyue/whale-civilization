@@ -1,0 +1,214 @@
+/* 🐋 Whale Civilization 3 — Stylesheet */
+:root {
+    --bio-cyan: #00f5d4;
+    --deep-blue: #0c1222;
+    --panel-bg: rgba(12, 18, 34, 0.92);
+    --glass-border: rgba(0, 245, 212, 0.2);
+    --font-heading: 'Outfit', sans-serif;
+    --font-body: 'Outfit', sans-serif;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+    font-family: var(--font-body);
+    color: #e2e8f0;
+    background: var(--deep-blue);
+    overflow: hidden;
+    width: 100vw;
+    height: 100vh;
+}
+
+#game-canvas {
+    position: fixed;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    z-index: 1;
+}
+
+/* Glass Panel */
+.glass-panel {
+    background: var(--panel-bg);
+    border: 1px solid var(--glass-border);
+    border-radius: 12px;
+    backdrop-filter: blur(12px);
+}
+
+/* Top Bar */
+#top-bar {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    z-index: 100;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 8px 16px;
+    background: rgba(12, 18, 34, 0.9);
+    border-bottom: 1px solid rgba(0, 245, 212, 0.15);
+}
+
+.resources { display: flex; gap: 16px; }
+.res { display: flex; align-items: center; gap: 4px; font-size: 14px; }
+.res small { color: #4ecdc4; font-size: 11px; }
+.res b { font-size: 16px; }
+.season-info { font-size: 13px; color: #94a3b8; }
+.season-info b { color: var(--bio-cyan); }
+.top-actions { display: flex; gap: 6px; }
+
+/* Buttons */
+.ui-btn {
+    background: rgba(30, 50, 80, 0.9);
+    border: 1px solid var(--glass-border);
+    color: #e2e8f0;
+    border-radius: 8px;
+    padding: 8px 14px;
+    cursor: pointer;
+    font-family: var(--font-body);
+    font-size: 13px;
+    transition: all 0.2s;
+}
+.ui-btn:hover { background: rgba(0, 245, 212, 0.15); border-color: var(--bio-cyan); }
+.icon-btn { padding: 6px 10px; font-size: 16px; }
+.mega-btn { background: linear-gradient(135deg, rgba(0,245,212,0.2), rgba(0,100,200,0.3)); border-color: var(--bio-cyan); font-weight: 600; }
+.mega-btn:hover { background: linear-gradient(135deg, rgba(0,245,212,0.3), rgba(0,100,200,0.4)); }
+
+/* Side Panels */
+.side-panel {
+    position: fixed;
+    top: 50px;
+    right: 10px;
+    width: 230px;
+    padding: 12px;
+    z-index: 90;
+    font-size: 12px;
+}
+.panel-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; }
+
+/* Advisor */
+.advisor {
+    position: fixed;
+    bottom: 80px;
+    left: 10px;
+    max-width: 380px;
+    padding: 14px;
+    z-index: 90;
+    font-size: 13px;
+    line-height: 1.5;
+}
+.advisor b { color: var(--bio-cyan); }
+
+/* Selection Panel */
+.sel-panel {
+    position: fixed;
+    bottom: 10px;
+    left: 10px;
+    width: 330px;
+    padding: 14px;
+    z-index: 95;
+    font-size: 12px;
+}
+.sel-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 8px; }
+.sel-header h3 { margin: 0; color: var(--bio-cyan); font-weight: 600; }
+.sel-header small { color: #94a3b8; display: block; }
+#sel-stats { display: grid; grid-template-columns: 1fr 1fr; gap: 4px; margin-bottom: 8px; font-size: 12px; }
+#sel-desc { font-style: italic; color: #94a3b8; font-size: 11px; margin-bottom: 8px; }
+#sel-actions { display: flex; flex-wrap: wrap; gap: 6px; }
+.action-btn { padding: 6px 12px; font-size: 11px; }
+.action-btn:disabled { opacity: 0.4; cursor: not-allowed; }
+
+/* Bottom Bar */
+#bottom-bar {
+    position: fixed;
+    bottom: 10px;
+    right: 10px;
+    z-index: 90;
+}
+#idle-badge {
+    background: #fbbf24;
+    color: #000;
+    border-radius: 10px;
+    padding: 1px 6px;
+    font-size: 10px;
+    font-weight: 700;
+    margin-left: 6px;
+}
+
+/* Minimap */
+#minimap-container {
+    position: fixed;
+    bottom: 55px;
+    right: 10px;
+    z-index: 80;
+    padding: 4px;
+}
+
+/* Modals */
+.civ-modal {
+    position: fixed;
+    inset: 0;
+    z-index: 200;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(0, 0, 0, 0.7);
+}
+.modal-content { max-width: 800px; width: 90%; max-height: 85vh; overflow-y: auto; padding: 24px; }
+.wide-modal { max-width: 700px; }
+
+/* Faction Grid */
+.faction-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-top: 20px; }
+.faction-card {
+    background: rgba(30, 50, 80, 0.6);
+    border: 2px solid rgba(0, 245, 212, 0.15);
+    border-radius: 12px;
+    padding: 16px;
+    cursor: pointer;
+    text-align: center;
+    transition: all 0.3s;
+}
+.faction-card:hover { border-color: var(--bio-cyan); transform: translateY(-2px); }
+.faction-card .faction-emoji { font-size: 40px; display: block; margin-bottom: 8px; }
+.faction-card h3 { color: var(--bio-cyan); font-size: 14px; margin-bottom: 4px; }
+.faction-card p { color: #94a3b8; font-size: 11px; }
+
+/* Tech Grid */
+.tech-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 10px; }
+.tech-card {
+    background: rgba(30, 50, 80, 0.6);
+    border: 1px solid rgba(0, 245, 212, 0.15);
+    border-radius: 8px;
+    padding: 12px;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+.tech-card:hover { border-color: var(--bio-cyan); }
+.tech-card.researched { border-color: #4ecdc4; background: rgba(0, 245, 212, 0.1); }
+.tech-card .tech-icon { font-size: 24px; }
+.tech-card h4 { color: var(--bio-cyan); font-size: 13px; margin: 4px 0; }
+.tech-card p { color: #94a3b8; font-size: 11px; }
+
+/* Goals progress */
+.goal-row { margin-bottom: 8px; }
+.goal-bar { height: 4px; background: rgba(255,255,255,0.1); border-radius: 2px; margin-top: 2px; }
+.goal-fill { height: 100%; background: var(--bio-cyan); border-radius: 2px; transition: width 0.3s; }
+
+/* Toast */
+#toast {
+    position: fixed;
+    top: 50px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 300;
+    background: rgba(12, 18, 34, 0.95);
+    border: 1px solid var(--bio-cyan);
+    border-radius: 8px;
+    padding: 10px 20px;
+    font-size: 13px;
+    color: #e2e8f0;
+    transition: opacity 0.3s;
+}
+#toast.show { opacity: 1; }
+
+/* Utility */
+.hidden { display: none !important; }
+.subtitle { color: #64748b; font-size: 14px; }

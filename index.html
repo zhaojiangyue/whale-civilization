@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>🐋 Whale Civilization 3</title>
+    <meta name="description" content="Lead your whale pod to greatness in this ocean strategy game" />
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="/src/index.css" />
+</head>
+
+<body>
+    <!-- Game Canvas -->
+    <canvas id="game-canvas"></canvas>
+
+    <!-- Top Bar -->
+    <div id="top-bar">
+        <div class="resources">
+            <span class="res" title="Vitality">🐟 <b id="res-vitality">0</b> <small
+                    id="res-vitality-income">+0</small></span>
+            <span class="res" title="Knowledge">🔬 <b id="res-knowledge">0</b> <small
+                    id="res-knowledge-income">+0</small></span>
+            <span class="res" title="Song">🎵 <b id="res-song">0</b> <small id="res-song-income">+0</small></span>
+        </div>
+        <div class="season-info">
+            <span id="season-icon"></span>
+            <b id="season-name">Feeding Season</b> |
+            Year <span id="year-num">1</span> |
+            Turn <span id="turn-num">1</span>
+        </div>
+        <div class="top-actions">
+            <button id="btn-tech" class="ui-btn icon-btn" title="Tech Tree">🧬</button>
+            <button id="btn-song-panel" class="ui-btn icon-btn" title="Song Panel">🎵</button>
+            <button id="btn-encyclopedia" class="ui-btn icon-btn" title="Encyclopedia">📖</button>
+            <button id="btn-help" class="ui-btn icon-btn" title="Help Guide"
+                style="font-size: 20px; color: #ef4444;">❓</button>
+        </div>
+    </div>
+
+    <!-- Goals Panel -->
+    <div id="goals-panel" class="glass-panel side-panel hidden">
+        <div class="panel-header">
+            <span>🏆 <b>Goals</b></span>
+            <button id="goals-toggle" class="ui-btn icon-btn" style="font-size:12px;padding:2px 6px;">−</button>
+        </div>
+        <div id="goals-content"></div>
+    </div>
+
+    <!-- Advisor Tip -->
+    <div id="advisor-tip" class="glass-panel advisor hidden">
+        <b>💡 Advisor</b>
+        <p id="advisor-text"></p>
+    </div>
+
+    <!-- Selection Panel -->
+    <div id="selection-panel" class="glass-panel sel-panel hidden">
+        <div class="sel-header">
+            <div>
+                <span id="sel-icon" style="font-size: 24px;"></span>
+                <h3 id="sel-name"></h3>
+                <small id="sel-faction"></small>
+            </div>
+            <button id="sel-close" class="ui-btn icon-btn">✕</button>
+        </div>
+        <div id="sel-stats"></div>
+        <div id="sel-desc"></div>
+        <div id="sel-actions"></div>
+    </div>
+
+    <!-- Next Turn / Idle Button -->
+    <div id="bottom-bar">
+        <button id="next-turn-btn" class="ui-btn mega-btn">
+            Next Turn <span id="idle-badge" class="hidden"></span>
+        </button>
+    </div>
+
+    <!-- Minimap -->
+    <div id="minimap-container" class="glass-panel">
+        <canvas id="minimap-canvas"></canvas>
+    </div>
+
+    <!-- Toast -->
+    <div id="toast" class="hidden"></div>
+
+    <!-- Main Menu -->
+    <div id="main-menu" class="civ-modal">
+        <div class="modal-content glass-panel" style="text-align: center; padding: 48px 32px;">
+            <p style="font-size: 64px; margin: 0;">🐋</p>
+            <h1 style="font-family: var(--font-heading); color: var(--bio-cyan); margin: 12px 0 4px;">Whale Civilization
+                3</h1>
+            <p class="subtitle" style="margin-bottom: 32px;">Lead your pod to greatness</p>
+            <div style="display: flex; flex-direction: column; gap: 12px; max-width: 280px; margin: 0 auto;">
+                <button id="menu-continue" class="ui-btn mega-btn hidden" style="padding: 14px 24px;">
+                    <span class="btn-icon">💾</span><span>Continue Game</span>
+                </button>
+                <button id="menu-new-game" class="ui-btn mega-btn" style="padding: 14px 24px;">
+                    <span class="btn-icon">🌊</span><span>New Game</span>
+                </button>
+                <button id="menu-encyclopedia" class="ui-btn"
+                    style="padding: 10px 24px; background: rgba(30,50,80,0.8); font-size: 14px;">
+                    📖 Whale Encyclopedia
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Game Settings Screen -->
+    <div id="game-settings" class="civ-modal hidden">
+        <div class="modal-content glass-panel" style="text-align: center; padding: 36px 32px; max-width: 420px;">
+            <h2 style="font-family: var(--font-heading); color: var(--bio-cyan); margin: 0 0 8px;">⚙️ Game Settings</h2>
+            <p class="subtitle" style="margin-bottom: 24px; font-size: 12px;">Customize your ocean world</p>
+
+            <div style="text-align: left; margin-bottom: 20px;">
+                <label
+                    style="color: #e2e8f0; font-weight: 600; font-size: 13px; display: block; margin-bottom: 6px;">🗺️
+                    Map Size</label>
+                <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px;">
+                    <button class="ui-btn map-size-btn" data-cols="35" data-rows="25"
+                        style="padding: 10px 8px; font-size: 12px;">
+                        <div style="font-size: 18px;">🏝️</div>
+                        <div><b>Small</b></div>
+                        <div style="color: #94a3b8; font-size: 10px;">35×25 · Fast</div>
+                    </button>
+                    <button class="ui-btn map-size-btn active" data-cols="60" data-rows="40"
+                        style="padding: 10px 8px; font-size: 12px; border-color: var(--bio-cyan);">
+                        <div style="font-size: 18px;">🌊</div>
+                        <div><b>Medium</b></div>
+                        <div style="color: #94a3b8; font-size: 10px;">60×40 · Standard</div>
+                    </button>
+                    <button class="ui-btn map-size-btn" data-cols="90" data-rows="60"
+                        style="padding: 10px 8px; font-size: 12px;">
+                        <div style="font-size: 18px;">🌏</div>
+                        <div><b>Large</b></div>
+                        <div style="color: #94a3b8; font-size: 10px;">90×60 · Epic</div>
+                    </button>
+                </div>
+            </div>
+
+            <div style="text-align: left; margin-bottom: 20px;">
+                <label style="color: #e2e8f0; font-weight: 600; font-size: 13px; display: block; margin-bottom: 6px;">
+                    🐋 AI Opponents <span id="ai-count-label" style="color: var(--bio-cyan);">3</span>
+                </label>
+                <input type="range" id="ai-count-slider" min="0" max="5" value="3"
+                    style="width: 100%; accent-color: var(--bio-cyan);">
+                <div
+                    style="display: flex; justify-content: space-between; font-size: 10px; color: #64748b; margin-top: 2px;">
+                    <span>Peaceful (0)</span><span>Crowded (5)</span>
+                </div>
+            </div>
+
+            <div
+                style="text-align: left; margin-bottom: 20px; padding: 10px; background: rgba(0,245,212,0.05); border-radius: 8px; border: 1px solid rgba(0,245,212,0.15); font-size: 11px; color: #94a3b8; line-height: 1.5;">
+                <b style="color: #e2e8f0;">🤖 Why other species?</b><br>
+                Each AI species has a unique personality:<br>
+                • 🐬 <b>Orca</b> — Aggressive hunters, will attack your pod<br>
+                • 🐳 <b>Humpback</b> — Peaceful singers, compete for Song victory<br>
+                • 🐋 <b>Sperm Whale</b> — Deep explorers, race for Knowledge<br>
+                • 🦄 <b>Narwhal</b> — Resource seekers, contest your feeding grounds<br>
+                They compete for the same resources and territory!
+            </div>
+
+            <div style="display: flex; gap: 12px;">
+                <button id="settings-back" class="ui-btn" style="flex: 1; padding: 12px;">← Back</button>
+                <button id="settings-start" class="ui-btn mega-btn" style="flex: 2; padding: 12px;">Choose Species
+                    →</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Faction Picker -->
+    <div id="faction-picker" class="civ-modal hidden">
+        <div class="modal-content glass-panel" style="text-align: center; padding: 32px;">
+            <h1 style="font-family: var(--font-heading); color: var(--bio-cyan);">🐋 Whale Civilization 3</h1>
+            <p class="subtitle">Choose your species</p>
+            <div id="faction-grid" class="faction-grid"></div>
+        </div>
+    </div>
+
+    <!-- Tech Tree Modal -->
+    <div id="tech-modal" class="civ-modal hidden">
+        <div class="modal-content glass-panel wide-modal">
+            <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;">
+                <h2 style="color:var(--bio-cyan);margin:0;">🧬 Tech Tree</h2>
+                <button id="tech-close" class="ui-btn icon-btn">✕</button>
+            </div>
+            <div id="tech-grid" class="tech-grid"></div>
+        </div>
+    </div>
+
+    <!-- Song Panel Modal -->
+    <div id="song-modal" class="civ-modal hidden">
+        <div class="modal-content glass-panel wide-modal">
+            <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;">
+                <h2 style="color:var(--bio-cyan);margin:0;">🎵 Song Verses</h2>
+                <button id="song-close" class="ui-btn icon-btn">✕</button>
+            </div>
+            <div id="song-grid" class="tech-grid"></div>
+        </div>
+    </div>
+
+    <!-- Encyclopedia Modal -->
+    <div id="encyclopedia-modal" class="civ-modal hidden">
+        <div class="modal-content glass-panel wide-modal">
+            <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;">
+                <h2 style="color:var(--bio-cyan);margin:0;">📖 Whale Encyclopedia</h2>
+                <button id="encyclopedia-close" class="ui-btn icon-btn">✕</button>
+            </div>
+            <div id="encyclopedia-content"></div>
+        </div>
+    </div>
+
+    <!-- Help Guide Modal -->
+    <div id="help-modal" class="civ-modal hidden">
+        <div class="modal-content glass-panel wide-modal">
+            <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;">
+                <h2 style="color:var(--bio-cyan);margin:0;">❓ Help Guide</h2>
+                <button id="help-close" class="ui-btn icon-btn">✕</button>
+            </div>
+            <div id="help-content"></div>
+        </div>
+    </div>
+
+    <script type="module" src="/src/main.js"></script>
+</body>
+
+</html>
